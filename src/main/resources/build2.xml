@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="HelloWorld" basedir=".">
+    <target name="bindgen">
+        <echo message="Running BindGen tool"/>
+        <java classpathref="classpath" fork="true" failonerror="true" classname="org.jibx.binding.generator.BindGen">
+            <arg value="-s"/>
+            <arg value="${basedir}/src/com/tian/nettystudy/netty/httpxml"/>
+            <arg value="com.tian.nettystudy.netty.httpxml.Order"/>
+        </java>
+    </target>
+</project>
