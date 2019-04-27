@@ -59,8 +59,8 @@ public class HttpFileServer {
                         }
                     });
 
-            ChannelFuture future = b.bind("192.168.30.123", port).sync();
-            System.out.println("HTTP文件服务器启动, 网址是: "+ "httpfile://192.168.30.123:"+port+url);
+            ChannelFuture future = b.bind("127.0.0.1", port).sync();
+            System.out.println("HTTP文件服务器启动, 网址是: "+ "httpfile://127.0.0.1:"+port+url);
             future.channel().closeFuture().sync();
 
         }catch (Exception e){

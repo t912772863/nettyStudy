@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ *
  * 消息头类定义
  * Created by Administrator on 2018/7/26 0026.
  */

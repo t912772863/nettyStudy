@@ -19,7 +19,6 @@ import java.util.Map;
  */
 public class NettyMessageDecoder extends LengthFieldBasedFrameDecoder {
     MarshallingDecoder marshallingDecoder;
-//    MessagePack messagePack = new MessagePack();
 
     public NettyMessageDecoder(int maxFrameLength, int lengthFieldOffset, int lengthFieldLength) throws IOException {
         super(maxFrameLength, lengthFieldOffset, lengthFieldLength);
@@ -33,38 +32,30 @@ public class NettyMessageDecoder extends LengthFieldBasedFrameDecoder {
         }
         NettyMessage message = new NettyMessage();
         Header header = new Header();
-        header.setCrcCode(frame.readInt());
-        header.setLength(frame.readInt());
-        header.setSessionId(frame.readLong());
-        header.setType(frame.readByte());
-        header.setPriority(frame.readByte());
-        int size = frame.readInt();
+        header.setCrcCode(in.readInt());
+        header.setLength(in.readInt());
+        header.setSessionId(in.readLong());
+        header.setType(in.readByte());
+        header.setPriority(in.readByte());
+        int size = in.readInt();
         if(size > 0){
             Map<String, Object> attch = new HashMap(size);
             int keySize = 0;
             byte[] keyArray = null;
             String key = null;
             for (int i = 0; i < size; i++) {
-                keySize = frame.readInt();
+                keySize = in.readInt();
                 keyArray = new byte[keySize];
-                frame.readBytes(keyArray);
+                in.readBytes(keyArray);
                 key = new String(keyArray, "UTF-8");
-
-//                byte[] byteArr = new byte[frame.readInt()];
-//                frame.readBytes(byteArr);
-//                attch.put(key, messagePack.read(byteArr));
-                attch.put(key, marshallingDecoder.decode(frame));
+                attch.put(key, marshallingDecoder.decode(in));
             }
             keyArray = null;
             key = null;
             header.setAttachment(attch);
         }
         if(in.readableBytes() > 4){
-//            byte[] byteArr = new byte[frame.readInt()];
-//            frame.readBytes(byteArr);
-//            message.setBody(messagePack.read(byteArr));
-
-            message.setBody(marshallingDecoder.decode(frame));
+            message.setBody(marshallingDecoder.decode(in));
         }
         message.setHeader(header);
         return message;

@@ -29,7 +29,7 @@ public class TimeClientHandler extends ChannelHandlerAdapter {
      */
     public void channelActive(ChannelHandlerContext ctx){
         ByteBuf message = null;
-        // 设计, 发送100次消息, 每发送一次都刷新一次
+        // 设计, 发送100次消息, 每发送一次都刷新一次. 这里只循环一次功能是没问题的, 循环多次会出现粘包问题
         for (int i = 0; i < 100; i++) {
             message = Unpooled.buffer(req.length);
             message.writeBytes(req);

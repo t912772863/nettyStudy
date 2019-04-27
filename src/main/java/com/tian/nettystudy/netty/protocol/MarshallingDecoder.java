@@ -7,6 +7,7 @@ import org.jboss.marshalling.Unmarshaller;
 import java.io.IOException;
 
 /**
+ * Netty协议消息解码工具类
  * Created by Administrator on 2018/7/27 0027.
  */
 public class MarshallingDecoder {
@@ -37,4 +38,5 @@ public class MarshallingDecoder {
             unmarshaller.close();
         }
     }
+
 }

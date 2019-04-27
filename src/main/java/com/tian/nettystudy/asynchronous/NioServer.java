@@ -26,7 +26,7 @@ public class NioServer {
         acceptorServer.configureBlocking(false);
         // 三. 创建Reactor线程, 创建多路复用器, 并启动线程.
         Selector selector = Selector.open();
-//        new Thread().start(new ReactorTask());
+//        new Thread(new ReactorTask()).start();
         // 四. 将ServerSocketChannel注册到Reactor线程的多路复用器selector上, 监听accept事件.
 //        SelectionKey key = acceptorServer.register(selector, SelectionKey.OP_ACCEPT,ioHandler);
         // 五. 多路复用器在线程run方法中无限循环轮询准备就绪的key,

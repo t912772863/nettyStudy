@@ -14,7 +14,7 @@ public class MarshallingCodecFactory {
      * @return
      * @throws IOException
      */
-    protected static Marshaller buildMarshalling() throws IOException {
+    public static Marshaller buildMarshalling() throws IOException {
         final MarshallerFactory marshallerFactory = Marshalling
                 .getProvidedMarshallerFactory("serial");
         final MarshallingConfiguration configuration = new MarshallingConfiguration();
@@ -30,7 +30,7 @@ public class MarshallingCodecFactory {
      * @return
      * @throws IOException
      */
-    protected static Unmarshaller buildUnMarshalling() throws IOException {
+    public static Unmarshaller buildUnMarshalling() throws IOException {
         final MarshallerFactory marshallerFactory = Marshalling.getProvidedMarshallerFactory("serial");
         final MarshallingConfiguration configuration = new MarshallingConfiguration();
         configuration.setVersion(5);

@@ -20,7 +20,7 @@ public class TimeServer {
      * @throws Exception
      */
     public void bind(int port) throws Exception{
-        // 配置服务湍的NIO线程组
+        // 配置服务湍的NIO线程组. 这里创建两个线程组目的在于, 一个用于服务端接收客户端连接, 另一个用于SocketChannel网络读写
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try{
