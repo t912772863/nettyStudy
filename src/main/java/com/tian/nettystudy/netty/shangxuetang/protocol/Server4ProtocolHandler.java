@@ -1,6 +1,7 @@
 package com.tian.nettystudy.netty.shangxuetang.protocol;
 
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -9,6 +10,7 @@ import java.io.UnsupportedEncodingException;
 /**
  * Created by tianxiong on 2019/4/27.
  */
+@ChannelHandler.Sharable
 public class Server4ProtocolHandler extends ChannelHandlerAdapter {
 
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws UnsupportedEncodingException {

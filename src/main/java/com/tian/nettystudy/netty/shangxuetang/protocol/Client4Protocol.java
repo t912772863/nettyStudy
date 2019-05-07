@@ -11,6 +11,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.timeout.WriteTimeoutHandler;
 
 import java.nio.charset.Charset;
 
@@ -21,6 +22,7 @@ import java.nio.charset.Charset;
 public class Client4Protocol {
     private EventLoopGroup workers;
     private Bootstrap bootstrap;
+    private ChannelFuture future;
 
     public Client4Protocol() {
         init();
@@ -43,10 +45,12 @@ public class Client4Protocol {
                  */
                 ch.pipeline().addLast(new DelimiterBasedFrameDecoder(10240,Unpooled.copiedBuffer("$end$".getBytes("UTF-8"))));
                 ch.pipeline().addLast(new StringDecoder(Charset.forName("UTF-8")));
+                // 3秒不写操作,自动断开
+                ch.pipeline().addLast(new WriteTimeoutHandler(3));
                 ch.pipeline().addLast(channelHandlers);
             }
         });
-        ChannelFuture future = bootstrap.connect("127.0.0.1", port).sync();
+        future = bootstrap.connect("127.0.0.1", port).sync();
         return future;
     }
 
@@ -63,7 +67,12 @@ public class Client4Protocol {
             // 不休眠, 快速循环写出, 查看粘包和协议问题是否解决.
             for (int i = 0; i < 100; i++) {
                 future.channel().writeAndFlush(Unpooled.copiedBuffer((Server4ProtocolHandler.ProtocolParser.transferTo(""+i)+"$end$").getBytes("UTF-8")));
+//                Thread.sleep(2000);
             }
+            // 休眠超过设置超时时长, 则需要重新与服务端连接
+            Thread.sleep(5000);
+            future = client.getChannelFuture("127.0.0.1",9999);
+            future.channel().writeAndFlush(Unpooled.copiedBuffer((Server4ProtocolHandler.ProtocolParser.transferTo(""+"test")+"$end$").getBytes("UTF-8")));
 
         }catch (Exception e){
             e.printStackTrace();
@@ -75,10 +84,21 @@ public class Client4Protocol {
                     e.printStackTrace();
                 }
             }
-            if(client != null){
-                client.release();
-            }
+//            if(client != null){
+//                client.release();
+//            }
         }
 
+    }
+
+    private ChannelFuture getChannelFuture(String host, int port) throws InterruptedException {
+        if(future == null){
+            future = this.bootstrap.connect(host, port).sync();
+        }
+        if(!future.channel().isActive()){
+            future = this.bootstrap.connect(host, port).sync();
+        }
+
+        return future;
     }
 }

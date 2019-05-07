@@ -24,7 +24,8 @@ public class AsyncTimeServerHandler implements Runnable{
             System.out.println("The time server is start at port: "+port);
 
         }catch (Exception e){
-
+            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
     }

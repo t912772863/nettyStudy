@@ -22,4 +22,14 @@ public class Client4ProtocolHandler extends ChannelHandlerAdapter {
         cause.printStackTrace();
         ctx.close();
     }
+
+    /**
+     * 当连接建立成功后触发
+     * 在一次连接中只运行一次.
+     * 通常用于连接确认和资源初始化
+     * @param ctx
+     */
+    public void channelActive(ChannelHandlerContext ctx){
+        System.out.println("client channel active.");
+    }
 }

@@ -77,7 +77,8 @@ public class AsyncTimeClientHandler implements Runnable, CompletionHandler<Void,
                                 System.out.println("Now is: "+body);
                                 latch.countDown();
                             }catch (Exception e){
-
+                                e.printStackTrace();
+                                throw new RuntimeException(e);
                             }
 
 

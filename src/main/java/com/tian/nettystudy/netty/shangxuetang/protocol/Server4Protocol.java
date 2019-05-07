@@ -8,6 +8,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.timeout.ReadTimeoutHandler;
 
 import java.nio.charset.Charset;
 
@@ -42,7 +43,10 @@ public class Server4Protocol {
             protected void initChannel(SocketChannel ch) throws Exception {
                 ch.pipeline().addLast(new DelimiterBasedFrameDecoder(10240,Unpooled.copiedBuffer("$end$".getBytes("UTF-8"))));
                 ch.pipeline().addLast(new StringDecoder(Charset.forName("UTF-8")));
+                // 定义一个定时断线处理器, 当多长时间内, 没有任何的可读数据,自动断开连接.
+                ch.pipeline().addLast(new ReadTimeoutHandler(3));
                 ch.pipeline().addLast(acceptorHandlers);
+
             }
         });
         ChannelFuture future = bootstrap.bind(port).sync();
